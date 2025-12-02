@@ -99,18 +99,19 @@ export const UserProfile: React.FC<UserProfileProps> = ({ currentUser, onUpdateU
               </div>
             </div>
 
-            {/* Email (Readonly) */}
+            {/* Email */}
             <div>
               <label className="block text-xs font-bold text-vet-muted uppercase tracking-wider mb-2 ml-1">
-                Email (Login)
+                Email
               </label>
               <div className="relative">
                 <Mail className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-vet-disabled" />
                 <input
                   type="email"
                   value={formData.email}
-                  disabled
-                  className="w-full pl-10 pr-4 py-3 bg-vet-bg border border-vet-border rounded-xl text-vet-disabled cursor-not-allowed"
+                  onChange={(e) => handleChange('email', e.target.value)}
+                  placeholder="exemplo@email.com"
+                  className="w-full pl-10 pr-4 py-3 bg-vet-input border border-vet-border rounded-xl text-vet-title placeholder-vet-disabled focus:border-vet-brand focus:ring-1 focus:ring-vet-brand outline-none transition-all"
                 />
               </div>
             </div>

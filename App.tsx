@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Moon, 
-  Sun, 
   BookOpen, 
   ChevronRight,
   Clock,
-  LogOut,
   User as UserIcon,
   Stethoscope,
   Calendar,
@@ -15,7 +13,6 @@ import {
 } from 'lucide-react';
 import { NightlyReport } from './components/NightlyReport';
 import { HoursLog } from './components/HoursLog';
-import { AuthScreen } from './components/AuthScreen';
 import { UserProfile } from './components/UserProfile';
 import { authService } from './services/authService';
 import { User } from './types';
@@ -24,30 +21,16 @@ import { Logo } from './components/Logo';
 type AppView = 'dashboard' | 'nightly-report' | 'hours-log' | 'profile';
 
 const App: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  // Inicializa diretamente com o usuário local (ou padrão)
+  const [currentUser, setCurrentUser] = useState<User>(authService.getUser());
   const [currentView, setCurrentView] = useState<AppView>('dashboard');
-
-  useEffect(() => {
-    const user = authService.getCurrentUser();
-    if (user) setCurrentUser(user);
-  }, []);
-
-  const handleLogout = () => {
-    authService.logout();
-    setCurrentUser(null);
-    setCurrentView('dashboard');
-  };
 
   const handleUpdateUser = (updatedUser: User) => {
     setCurrentUser(updatedUser);
   };
 
-  if (!currentUser) {
-    return <AuthScreen onLoginSuccess={setCurrentUser} />;
-  }
-
   return (
-    <div className="min-h-screen bg-vet-bg pb-24 text-vet-text">
+    <div className="min-h-screen bg-vet-bg pb-24 text-vet-text flex flex-col">
       
       {/* Header */}
       <header className="bg-vet-card border-b border-vet-border shadow-lg sticky top-0 z-30">
@@ -65,7 +48,7 @@ const App: React.FC = () => {
             <h1 className="text-xl font-bold leading-tight text-vet-title tracking-tight">VetFlow</h1>
           </button>
 
-          {/* Lado Direito: Perfil e Logout */}
+          {/* Lado Direito: Perfil */}
           <div className="flex items-center gap-4">
             
             {/* Botão de Perfil */}
@@ -79,37 +62,25 @@ const App: React.FC = () => {
                    {currentUser.name}
                  </p>
                  <p className="text-[10px] text-vet-muted uppercase tracking-wider">
-                   {currentUser.crmv || 'Editar Perfil'}
+                   {currentUser.crmv || 'Configurar Perfil'}
                  </p>
               </div>
               <div className="bg-vet-input p-2 rounded-full border border-vet-border group-hover:border-vet-brand group-hover:bg-vet-brand/10 transition-all">
                 <UserIcon className="w-5 h-5 text-vet-muted group-hover:text-vet-brand" />
               </div>
             </button>
-
-            {/* Separador */}
-            <div className="h-6 w-px bg-vet-border"></div>
-
-            {/* Botão Sair */}
-            <button 
-              onClick={handleLogout}
-              className="p-2 text-vet-muted hover:text-vet-error hover:bg-vet-error/10 rounded-full transition-colors"
-              title="Sair"
-            >
-              <LogOut className="w-5 h-5" />
-            </button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-4 py-6">
+      <main className="max-w-3xl mx-auto px-4 py-6 w-full flex-grow">
         
         {currentView === 'dashboard' && (
           <div className="animate-in fade-in slide-in-from-bottom-5 duration-500 space-y-8">
             
             <div className="mb-6 mt-2">
               <h2 className="text-2xl font-bold text-vet-title">Olá, {currentUser.name.split(' ')[0]}</h2>
-              <p className="text-vet-muted">Selecione uma ferramenta para começar.</p>
+              <p className="text-vet-muted">Bem-vindo(a) à sua plataforma clínica.</p>
             </div>
 
             {/* SEÇÃO: ATENDIMENTO */}
@@ -280,6 +251,18 @@ const App: React.FC = () => {
         )}
 
       </main>
+
+       {/* Footer */}
+       <footer className="mt-auto border-t border-vet-border bg-vet-card py-6">
+          <div className="max-w-4xl mx-auto px-4 text-center">
+            <p className="text-vet-muted text-sm">
+              © 2024 VetFlow - Plataforma Web de Gestão Clínica.
+            </p>
+            <p className="text-vet-disabled text-xs mt-2">
+              Desenvolvido para facilitar a rotina veterinária.
+            </p>
+          </div>
+       </footer>
     </div>
   );
 };

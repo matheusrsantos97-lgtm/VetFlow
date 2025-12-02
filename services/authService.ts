@@ -1,73 +1,72 @@
 import { User } from "../types";
 
-const USERS_KEY = 'animale_users';
-const CURRENT_USER_KEY = 'animale_current_user';
+const USER_KEY = 'vetflow_user_profile';
+
+const DEFAULT_USER: User = {
+  id: 'default_user',
+  name: 'Veterinário(a)',
+  email: '',
+  password: '', // Não utilizado mais
+  crmv: '',
+  phone: '',
+  birthDate: ''
+};
 
 export const authService = {
-  getUsers: (): User[] => {
-    const usersStr = localStorage.getItem(USERS_KEY);
-    return usersStr ? JSON.parse(usersStr) : [];
+  // Retorna o usuário atual ou cria um padrão se não existir
+  getUser: (): User => {
+    try {
+      const userStr = localStorage.getItem(USER_KEY);
+      if (userStr) {
+        return JSON.parse(userStr);
+      }
+      // Se não existir, salva e retorna o padrão
+      localStorage.setItem(USER_KEY, JSON.stringify(DEFAULT_USER));
+      return DEFAULT_USER;
+    } catch (error) {
+      return DEFAULT_USER;
+    }
+  },
+
+  updateProfile: (updatedUser: User): User => {
+    localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+    return updatedUser;
+  },
+
+  login: (email: string, password: string): User => {
+    // Mock login implementation
+    try {
+      const userStr = localStorage.getItem(USER_KEY);
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        // If the stored user has no email, take the one provided (lazy init)
+        if (!user.email) {
+          user.email = email;
+          localStorage.setItem(USER_KEY, JSON.stringify(user));
+        }
+        return user;
+      }
+      // If no user found, create a default one with the email
+      const newUser = { ...DEFAULT_USER, email };
+      localStorage.setItem(USER_KEY, JSON.stringify(newUser));
+      return newUser;
+    } catch (error) {
+      return DEFAULT_USER;
+    }
   },
 
   register: (name: string, email: string, password: string): User => {
-    const users = authService.getUsers();
-    
-    if (users.find(u => u.email === email)) {
-      throw new Error("Este email já está cadastrado.");
-    }
-
+    // Mock register implementation
     const newUser: User = {
-      id: Date.now().toString(),
+      id: `user_${Date.now()}`,
       name,
       email,
-      password,
+      password, // In a real app, this should be hashed
       crmv: '',
       phone: '',
       birthDate: ''
     };
-
-    users.push(newUser);
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    
-    // Auto login after register
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(newUser));
+    localStorage.setItem(USER_KEY, JSON.stringify(newUser));
     return newUser;
-  },
-
-  login: (email: string, password: string): User => {
-    const users = authService.getUsers();
-    const user = users.find(u => u.email === email && u.password === password);
-
-    if (!user) {
-      throw new Error("Email ou senha inválidos.");
-    }
-
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
-    return user;
-  },
-
-  updateProfile: (updatedUser: User): User => {
-    const users = authService.getUsers();
-    const index = users.findIndex(u => u.id === updatedUser.id);
-    
-    if (index === -1) throw new Error("Usuário não encontrado.");
-
-    // Atualiza na lista geral
-    users[index] = updatedUser;
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-
-    // Atualiza sessão atual
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updatedUser));
-    
-    return updatedUser;
-  },
-
-  logout: () => {
-    localStorage.removeItem(CURRENT_USER_KEY);
-  },
-
-  getCurrentUser: (): User | null => {
-    const userStr = localStorage.getItem(CURRENT_USER_KEY);
-    return userStr ? JSON.parse(userStr) : null;
   }
 };

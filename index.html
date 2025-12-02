@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VetFlow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              vet: {
+                bg: '#0D0F16',       // Fundo geral
+                card: '#161922',     // Cards / Painéis
+                input: '#1C202A',    // Inputs
+                border: '#2A2F3A',   // Bordas
+                
+                title: '#F2F4F7',    // Títulos
+                text: '#C9CDD6',     // Texto padrão
+                muted: '#808694',    // Texto secundário
+                disabled: '#5E636E', // Desabilitado
+                
+                brand: {
+                  DEFAULT: '#FF6A1A', // Principal
+                  hover: '#FF7F33',   // Hover
+                  active: '#CC5314',  // Ativo
+                },
+                
+                success: '#4CC38A',
+                warning: '#F5A623',
+                error: '#FF5C5C',
+                info: '#3EA6FF',
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #0D0F16;
+        color: #C9CDD6;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0D0F16; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #2A2F3A; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #5E636E; 
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "jspdf": "https://esm.sh/jspdf@2.5.1",
+    "jspdf-autotable": "https://esm.sh/jspdf-autotable@3.8.2"
+  }
+}
+</script>
+</head>
+  <body class="bg-vet-bg text-vet-text antialiased selection:bg-vet-brand selection:text-white">
+    <div id="root"></div>
+  </body>
+</html>

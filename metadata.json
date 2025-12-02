@@ -1,0 +1,5 @@
+{
+  "name": "VetFlow",
+  "description": "Aplicativo veterinário modular para geração de relatórios e comunicação com tutores.",
+  "requestFramePermissions": []
+}
